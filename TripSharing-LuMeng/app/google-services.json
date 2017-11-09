@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "916490788160-g2158kuvu3k48i4f5rtl5t58g20ki97i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tainingzhang.tripsharing_v0",
+            "certificate_hash": "2e4eaff9d7b825ed1152f4d489b9f9ce77fc874e"
+          }
+        },
+        {
           "client_id": "916490788160-j4lael12jugm20dc05jhlvni2khnmgrf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

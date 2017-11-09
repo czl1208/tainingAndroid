@@ -23,6 +23,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,18 +43,21 @@ public class info extends AppCompatActivity {
     ListView listView;
     FirebaseDatabase database;
     DatabaseReference myRef;
+    private FirebaseAuth firebaseAuth;
     Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+        firebaseAuth = FirebaseAuth.getInstance();
         context = this;
         String place_id = "12345678";
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
         DatabaseReference place = myRef.child("Place").child(place_id);
-        DatabaseReference Comment = place.child("Comments");
+        final DatabaseReference user = myRef.child("users").child(firebaseAuth.getCurrentUser().getUid().toString());
+        final DatabaseReference Comment = place.child("Comments");
 
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -121,7 +125,7 @@ public class info extends AppCompatActivity {
                     contents.add(comment.child("Content").getValue(String.class));
                 }
                 alert(usernames.size() + "");
-                String[] userName = new String[usernames.size() + 1];
+                final String[] userName = new String[usernames.size() + 1];
                 String[] comments = new String[contents.size() + 1];
                 for(int i = 0; i < usernames.size(); i++) {
                     userName[i] = usernames.get(i);
@@ -136,17 +140,40 @@ public class info extends AppCompatActivity {
                         if(i == listAdapter.getCount() - 1) {
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(info.this);
                             View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
-                            EditText editText = (EditText)mView.findViewById(R.id.editText);
+                            final EditText editText = (EditText)mView.findViewById(R.id.editText);
                             Button btn = (Button) mView.findViewById(R.id.btnComment);
+                            mBuilder.setView(mView);
+                            final AlertDialog dialog = mBuilder.create();
+                            dialog.show();
                             btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    alert("comment successfully!");
+                                    user.addValueEventListener(new ValueEventListener() {
+
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            String userName = dataSnapshot.child("name").getValue().toString();
+                                            String comments = editText.getText().toString();
+
+                                            Comments c = new Comments(userName, comments);
+                                            String id = Comment.push().getKey();
+                                            Comment.child(id).setValue(c);
+
+                                            alert(comments);
+                                            dialog.dismiss();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
                                 }
+
                             });
-                            mBuilder.setView(mView);
-                            AlertDialog dialog = mBuilder.create();
-                            dialog.show();
+//                            mBuilder.setView(mView);
+//                            AlertDialog dialog = mBuilder.create();
+//                            dialog.show();
                         }
                     }
                 });
@@ -173,4 +200,17 @@ public class info extends AppCompatActivity {
         toast.show();
     }
 
+    public void update(String userName, String comments) {
+
+    }
+
+}
+
+class Comments{
+    String user;
+    String Content;
+    public Comments(String user, String comments) {
+        this.Content = comments;
+        this.user = user;
+    }
 }

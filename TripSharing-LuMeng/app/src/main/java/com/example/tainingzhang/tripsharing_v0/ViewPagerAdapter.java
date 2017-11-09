@@ -16,14 +16,14 @@ import android.widget.ImageView;
 public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
-    private Integer[] images = {R.drawable.slide1, R.drawable.slide2, R.drawable.slide3}; // change this type of this field. change to bitmap[]
-    //private Bitmap[] images;
+    //private Integer[] images = {R.drawable.slide1, R.drawable.slide2, R.drawable.slide3}; // change this type of this field. change to bitmap[]
+    private Bitmap[] images;
     //
     // You should change this constructor, add the images field.
     //
     public ViewPagerAdapter(Context context, Bitmap[] images) {
         this.context = context;
-        //this.images = images
+        this.images = images;
     }
     //
     //
@@ -45,8 +45,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.custom_layout, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView2);
-        imageView.setImageResource(images[position]); // currently use integer to set the image. Ask Menglu how to set bitmap in imageView
-        //imageView.setImageBitmap(images[position]);
+        //imageView.setImageResource(images[position]); // currently use integer to set the image. Ask Menglu how to set bitmap in imageView
+        imageView.setImageBitmap(images[position]);
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);
         return view;

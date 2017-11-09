@@ -24,7 +24,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void onClickSearch(View v) {
+        // in this function you need get the place id from Meng lu
+        // transmit this place id to info activity
+
+        // You need transfer the bitmap you get into the info class
+        String placeId = "";
         Intent i = new Intent(MainActivity.this, info.class);
+
+
+
+
+        i.putExtra("PlaceId", placeId);
+
+        //Ask Menglu how to pass the bitmaps she get in this activity to info activity
+
+
         startActivity(i);
     }
 

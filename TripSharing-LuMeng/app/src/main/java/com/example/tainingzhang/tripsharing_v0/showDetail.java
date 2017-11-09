@@ -30,13 +30,14 @@ public class showDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        String place_id = getIntent().getExtras().getString("PlaceId");
         setContentView(R.layout.activity_show_detail);
         Button btnJoin = (Button) findViewById(R.id.btnJoin);
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
         final DatabaseReference user = myRef.child("users").child(firebaseAuth.getCurrentUser().getUid().toString());
-        Users = myRef.child("Place").child("12345678").child("users");
+        Users = myRef.child("Place").child(place_id).child("users");
 
         Users.addValueEventListener(new ValueEventListener() {
 

@@ -2,6 +2,7 @@ package com.example.tainingzhang.tripsharing_v0;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,13 +46,15 @@ public class info extends AppCompatActivity {
     DatabaseReference myRef;
     private FirebaseAuth firebaseAuth;
     Context context;
+    String place_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
         firebaseAuth = FirebaseAuth.getInstance();
         context = this;
-        String place_id = "12345678";
+        //place_id = getIntent().getExtras().getString("PlaceId");
+        place_id = "12345678"; // you should get this id from the main activity;
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -66,7 +69,11 @@ public class info extends AppCompatActivity {
 
         slideDotspanel = (LinearLayout) findViewById(R.id.SlideDots);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
+        // store the image get from Menglu to this array
+
+        Bitmap[] images = new Bitmap[5]; // need get from main activity
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, images);
 
         viewPager.setAdapter(viewPagerAdapter);
 
@@ -191,6 +198,7 @@ public class info extends AppCompatActivity {
 
     public void viewOnClick(View v) {
         Intent i = new Intent(getApplicationContext(), showDetail.class);
+        i.putExtra("PlaceId", place_id);
         startActivity(i);
     }
 
